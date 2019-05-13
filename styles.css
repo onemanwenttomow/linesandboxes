@@ -2,3 +2,39 @@ body {
     margin: 0;
     box-sizing: border-box;
 }
+
+.board {
+    display: inline-flex;
+}
+
+.row {
+    height: 50px;
+    width: 50px;
+    border-top: 2px solid #eeeeee;
+    border-left: 2px solid #eeeeee;
+}
+
+.row:last-child {
+    border-bottom: 2px solid #eeeeee;
+}
+
+.col:last-child {
+    border-right: 2px solid #eeeeee;
+}
+
+
+.border-top {
+    border-top: 2px solid #00adb5;
+}
+
+.border-top-player2 {
+    border-top: 2px solid #222831;
+}
+
+.border-left {
+    border-left: 2px solid #00adb5;
+}
+
+.border-left-player2 {
+    border-left: 2px solid #222831;
+}
