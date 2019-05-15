@@ -7,11 +7,23 @@ body {
     display: inline-flex;
 }
 
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
 .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2vw;
     height: 50px;
     width: 50px;
     border-top: 2px solid #eeeeee;
     border-left: 2px solid #eeeeee;
+    padding: 1px;
 }
 
 .row:last-child {
@@ -38,3 +50,13 @@ body {
 .border-left-player2 {
     border-left: 2px solid #222831;
 }
+
+/* .player1 {
+    background-color: #00adb5;
+    opacity: 0.5;
+}
+
+.player2 {
+    background-color: #222831;
+    opacity: 0.5;
+} */

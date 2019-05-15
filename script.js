@@ -46,6 +46,54 @@ function changeTurn() {
 
 function checkForFill(row, col, side) {
     console.log("checking: ", row, col, side);
+    var markedSides = 0;
+    var rows = document.getElementsByClassName("row"+row);
+    console.log(rows);
+    for (var i = 0; i < rows.length; i++) {
+        if (rows[i].parentNode.classList.contains("col" + col)) {
+            console.log(`******************************
 
-    console.log(document.getElementsByClassName("row"+row));
+                         ******************************
+                `);
+            // console.log(rows[i -1], rows[i], rows[i + 1], rows[i].parentNode.children[Number(row) + 1], rows[i].parentNode.children[Number(row) - 1]);
+
+            // checkTop(side, rows[i]) ? markedSides++ : markedSides += 0;
+            // checking top
+            checkTop(rows[i].parentNode.children[Number(row) + 1]) ? markedSides++ : markedSides += 0;
+            checkTop(rows[i].parentNode.children[Number(row) - 1]) ? markedSides++ : markedSides += 0;
+            // checking sides
+            checkTop(rows[i]) ? markedSides++ : markedSides += 0;
+            checkTop(rows[i - 1]) ? markedSides++ : markedSides += 0;
+            checkTop(rows[i + 1]) ? markedSides++ : markedSides += 0;
+            console.log("markedSides after all checks, ", markedSides);
+
+            if (markedSides === 4) {
+                if (playerTurn === 1) {
+                    rows[i].classList.add('player' + playerTurn);
+                    rows[i].innerHTML = "🦔";
+                    changeTurn();
+                } else {
+                    rows[i].classList.add('player' + playerTurn);
+                    rows[i].innerHTML = "🐢";
+                    changeTurn();
+                }
+            }
+
+        }
+    }
+}
+
+function checkTop(node) {
+    if (node.classList.contains("border-top") ||
+        node.classList.contains("border-top-player2") ||
+        node.classList.contains("border-left") ||
+        node.classList.contains("border-left-player2")
+    ) {
+        console.log("true for in top: ", node);
+        return true;
+    }
+    if (node.classList.contains("border-left") || node.classList.contains("border-left-player2")) {
+        console.log("true for in left: ", node);
+        return true;
+    }
 }
