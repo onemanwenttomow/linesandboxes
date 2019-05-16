@@ -1,106 +1,53 @@
 console.log("sanity check");
 
 var board = document.getElementsByClassName("board")[0];
-var rows = "";
-var html = "";
-var boardSize = 6;
 var playerTurn = 1;
+var html = "";
+var rows = 7;
 
-for (var i = 0; i < boardSize; i++) {
-    rows += '<div class="row row' + i + '"></div>';
-}
-
-for (var j = 0; j < boardSize; j++) {
-    html += '<div class="col col' + j + '">' + rows + "</div>";
+for (var i = 0; i < rows*rows; i++) {
+    html += "<div class='square'><div class='inner-square'></div></div>";
 }
 
 board.innerHTML = html;
 
 board.addEventListener("click", function(e) {
     e.stopPropagation();
-    var row = e.target.classList[1].charAt(3);
-    var col = e.target.parentNode.classList[1].charAt(3);
-    console.log("row", row);
-    console.log("col", col);
-
-    if (e.offsetY < 10) {
-        if (e.target.classList.contains("border-top")) { return; }
-        playerTurn === 1
-            ? e.target.classList.add("border-top")
-            : e.target.classList.add("border-top-player2");
-        checkForFill(row, col, "top");
-        changeTurn();
-    } else if (e.offsetX < 10) {
-        if (e.target.classList.contains("border-left")) { return; }
-        playerTurn === 1
-            ? e.target.classList.add("border-left")
-            : e.target.classList.add("border-left-player2");
-        checkForFill(row, col, "left");
-        changeTurn();
+    if (playerTurn === 1) {
+        e.target.classList.add('btp1');
+        e.target.classList.add('bbp1');
+        e.target.classList.add('blp1');
+        e.target.classList.add('brp1');
+    } else {
+        e.target.classList.add('blp2');
+        e.target.classList.add('brp2');
+        e.target.classList.add('btp2');
+        e.target.classList.add('bbp2');
     }
+    changeTurn();
 });
 
-function checkForFill(row, col, side) {
-    console.log("checking: ", row, col, side);
-    var rows = document.getElementsByClassName("row"+row);
-    console.log(rows);
-    for (var i = 0; i < rows.length; i++) {
-        if (rows[i].parentNode.classList.contains("col" + col)) {
-            console.log(`******************************
-        🦔🦔🦔🦔🦔🦔🦔
-                         ******************************
-                `);
-            console.log(rows[i -1], rows[i], rows[i + 1], rows[i].parentNode.children[Number(row) + 1], rows[i].parentNode.children[Number(row) - 1]);
 
-            var markedSides = 0;
-            // checkTop(side, rows[i]) ? markedSides++ : markedSides += 0;
-            // checking top
-            markedSides += checkTop(rows[i].parentNode.children[Number(row) + 1]);
-            markedSides += checkTop(rows[i].parentNode.children[Number(row) - 1]);
-            // checking sides
-            markedSides += checkTop(rows[i]);
-            markedSides += checkTop(rows[i - 1]);
-            markedSides += checkTop(rows[i + 1]);
-            console.log("markedSides after all checks, ", markedSides);
 
-            if (markedSides >= 4) {
-                if (playerTurn === 1) {
-                    rows[i].classList.add('player' + playerTurn);
-                    rows[i].innerHTML = "🦔";
-                    changeTurn();
-                } else {
-                    rows[i].classList.add('player' + playerTurn);
-                    rows[i].innerHTML = "🐢";
-                    changeTurn();
-                }
-            }
-
-        }
+function fillBoxWithPlayer(node) {
+    if (playerTurn === 1) {
+        node.classList.add('player' + playerTurn);
+        node.innerHTML = "🦔";
+    } else {
+        node.classList.add('player' + playerTurn);
+        node.innerHTML = "🐢";
     }
 }
 
-function checkTop(node) {
-    var count = 0;
-    if (node.classList.contains("border-top")) {
-        console.log("true for in top: ", node);
-        count++;
-    }
-    if (node.classList.contains("border-top-player2")) {
-        console.log("true for in left: ", node);
-        count++;
-    }
-    if (node.classList.contains("border-left")) {
-        console.log("true for in left: ", node);
-        count++;
-    }
-    if (node.classList.contains("border-left-player2")) {
-        console.log("true for in left: ", node);
-        count++;
-    }
-    console.log("count: ", count);
-    return count;
-}
 
 function changeTurn() {
-    playerTurn === 1 ? (playerTurn = 2) : (playerTurn = 1);
+    if (playerTurn === 1) {
+        // p1.classList.remove('p1-active');
+        // p2.classList.add('p2-active');
+        playerTurn = 2;
+    } else {
+        // p2.classList.remove('p2-active');
+        // p1.classList.add('p1-active');
+        playerTurn = 1;
+    }
 }
