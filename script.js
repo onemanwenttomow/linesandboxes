@@ -25,42 +25,59 @@ board.addEventListener("click", function(e) {
     e.stopPropagation();
     var row = e.target.parentNode.classList[1];
     if (nonClicks(e.target)) { return; }
-    console.log("p"+playerTurn);
-    e.target.classList.add("p"+playerTurn);
-
-    console.log("this was clicked on", e.target);
-    if (row[0] == "h") {
-        horizontalCheck(e.target, row);
-    } else {
-        console.log("vertical check");
-        verticalCheck(e.target, row)
+    if (e.target.classList[2] == "p1" || e.target.classList[2] == "p1" ) {
+        return;
     }
-    if (playerTurn === 1) {
+    e.target.classList.add("p" + playerTurn);
 
-    } else {
+    row[0] == "h" ? horizontalCheck(e.target, row) : verticalCheck(e.target, row);
 
-    }
+
     changeTurn();
 });
 
 function horizontalCheck(node, row) {
-    checkForCompletedSquare(node , row, 2, "top");
-    checkForCompletedSquare(node , row, 2, "bottom");
-    checkForCompletedSquare(node , row, 1);
-    checkForCompletedSquare(node , row, -1);
+    var topScore = 0;
+    var bottomScore = 0;
+    topScore += checkForCompletedSquare(node , row, 2, "top");
+    topScore += checkForCompletedSquare(node , row, 1);
+
+    console.log("topScore", topScore);
+    bottomScore += checkForCompletedSquare(node , row, 2, "bottom");
+    bottomScore += checkForCompletedSquare(node , row, -1);
+
+    console.log("bottomScore", bottomScore);
 }
 
 function verticalCheck(node, row) {
+    var leftScore = checkForCompletedSquareVertical(node, row, "left");
+    var rightScore = checkForCompletedSquareVertical(node, row, "right");
+    console.log("rightScore", rightScore, node);
+    console.log("leftScore", leftScore, node);
+
+}
+
+function checkForCompletedSquareVertical(node, row, leftOrRight) {
+    var numberOfLines = 0;
     var colNum = node.classList[1][2];
-    console.log(colNum);
+    var rowAboveAndBelow = node.parentNode.parentNode.children;
     console.log(node);
-    console.log(node.parentNode.parentNode.children[Number(row[1]) * 2], row);
-    console.log(node.parentNode.parentNode.children[Number(row[1]) * 2 + 2], row);
-    node.classList[1] && console.log("right: ", node.parentNode.children[node.classList[1][2] * 2 + 2]);
-    node.classList[1] && console.log("left: ", node.parentNode.children[node.classList[1][2] * 2 - 2]);
+    checkForPlayerLine(node) && numberOfLines++;
+    if (leftOrRight == "left") {
+        node.classList[1] && checkForPlayerLine(node.parentNode.children[node.classList[1][2] * 2 + 2]) && numberOfLines++;
+        checkForPlayerLine(rowAboveAndBelow[Number(row[1]) * 2].children[colNum * 2 + 1]) && numberOfLines++;
+        checkForPlayerLine(rowAboveAndBelow[Number(row[1]) * 2 + 2].children[colNum * 2 + 1]) && numberOfLines++;
+
+    } else {
+        node.classList[1] && checkForPlayerLine(node.parentNode.children[node.classList[1][2] * 2 - 2]) && numberOfLines++;
+        checkForPlayerLine(rowAboveAndBelow[Number(row[1]) * 2].children[colNum * 2 - 1], row) && numberOfLines++;
+        checkForPlayerLine(rowAboveAndBelow[Number(row[1]) * 2 + 2].children[colNum * 2 - 1], row) && numberOfLines++;
+    }
+    return numberOfLines;
 }
 
 function checkForCompletedSquare(node, row, top, topOrBottom) {
+    var numberOfLines = 0;
     var rowNum = row[1];
     var rowAbove = {};
     var rowBelow = {};
@@ -70,31 +87,40 @@ function checkForCompletedSquare(node, row, top, topOrBottom) {
     rowNum == 0 ? arrayToCheck = rowBelow : arrayToCheck = rowAbove;
     var colNum = node.classList[1];
 
-    if (top === 2) {
-        for (var k = 0; k < arrayToCheck.children.length; k++) {
+    if (!arrayToCheck) { return; }
+
+    for (var k = 0; k < arrayToCheck.children.length; k++) {
+        if (top === 2) {
             if (colNum == arrayToCheck.children[k].classList[1]) {
-                console.log("element clicked on: ", node);
-                topOrBottom == "top" && console.log("element above: ", rowAbove.children[k]);
-                topOrBottom == "bottom" && console.log("element below: ", rowBelow.children[k]);
+                checkForPlayerLine(node) && numberOfLines ++;
+                topOrBottom == "top" && checkForPlayerLine(rowAbove.children[k]) && numberOfLines ++;
+                topOrBottom == "bottom" && checkForPlayerLine(rowBelow.children[k]) && numberOfLines ++;
 
             }
-        }
-    } else {
-        for (var l = 0; l < arrayToCheck.children.length; l++) {
-            var vertLineToCheck = arrayToCheck.children[l];
+        } else {
+            var vertLineToCheck = arrayToCheck.children[k];
             vertLineToCheck.classList[1] &&
             vertLineToCheck.classList[1][2] == colNum[2] &&
-                console.log("square above left: ", vertLineToCheck);
+                checkForPlayerLine(vertLineToCheck) && numberOfLines ++;
             vertLineToCheck.classList[1] &&
             vertLineToCheck.classList[1][2] == Number(colNum[2]) + 1  &&
-                console.log("square above right: ", vertLineToCheck);
+                checkForPlayerLine(vertLineToCheck) && numberOfLines ++;
         }
     }
+    return numberOfLines;
 }
 
 function nonClicks(node) {
     if (node.classList[0] === "square" || node.classList[0] === "dot") {
         console.log("made it here");
+        return true;
+    }
+}
+
+function checkForPlayerLine(node) {
+    if (!node) { return false; }
+    console.log(node);
+    if (node.classList[2] == "p" + playerTurn) {
         return true;
     }
 }
