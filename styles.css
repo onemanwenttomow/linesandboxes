@@ -23,6 +23,16 @@ body {
     background-color: #4d606e;
 }
 
+.player1 {
+    /* background-color: #3fbac2; */
+    /* opacity: 0.5; */
+}
+
+.player2 {
+    /* background-color: #4d606e; */
+    /* opacity: 0.5; */
+}
+
 .dot {
     height: 1.5vh;
     width: 1.5vh;
@@ -42,6 +52,10 @@ body {
 }
 
 .square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 7vh;
     height: 10vh;
     width: 10vh;
     /* background-color: #f5f5f5; */
