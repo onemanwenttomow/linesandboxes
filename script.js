@@ -43,8 +43,11 @@ function horizontalCheck(node, row) {
     topScore += checkForCompletedSquare(node , row, 2, "top");
     topScore += checkForCompletedSquare(node , row, 1);
     bottomScore += checkForCompletedSquare(node , row, 2, "bottom");
-    bottomScore += checkForCompletedSquare(node , row, -1);
-    console.log("checking top");
+    console.log("bottomScore after first check", bottomScore);
+    bottomScore += checkForCompletedSquare(node , row, -1, "bottom") ;
+    console.log("bottomScore after second check", bottomScore);
+
+    console.log("checking!!!!!!!!!!!!!!!!!!!!!!1  topScore",topScore,  "Bottomoscore, ", bottomScore);
     if (!node.parentNode.parentNode.children[Number(row[1]) * 2 + 1]) {
         bottomSquare = [];
     } else {
@@ -70,6 +73,7 @@ function verticalCheck(node, row) {
     leftScore === 4 && changeTurn();
     rightScore === 4 && changeTurn();
     rightScore === 4 && leftScore === 4 && changeTurn();
+    console.log("leftscore", leftScore, "rightScore", rightScore);
 
 }
 
@@ -101,32 +105,40 @@ function checkForCompletedSquare(node, row, top, topOrBottom) {
     var arrayToCheck;
     rowNum == 0 ? rowAbove.children = [] : rowAbove = node.parentNode.parentNode.children[rowNum * 2 - top];
     rowNum == rows ? rowBelow.children = [] : rowBelow = node.parentNode.parentNode.children[rowNum * 2 + top];
-    rowNum == 0 ? arrayToCheck = node.parentNode.parentNode.children[rowNum * 2 - top] : arrayToCheck = rowAbove;
+    rowNum == 0 ? arrayToCheck = node.parentNode.parentNode.children[rowNum * 2 + top] : arrayToCheck = rowAbove;
     var colNum = node.classList[1];
-    console.log("rowAbove: ", node.parentNode.parentNode.children[rowNum * 2 - top]);
-    console.log("ARRAY TO CHECK", arrayToCheck);
-    console.log("rows",rows, "rowNum", rowNum);
-    console.log("rowBelow:" ,node.parentNode.parentNode.children[rowNum * 2 + top]);
-    console.log("arrayToCheck", top, rowNum, arrayToCheck, rowBelow, rowAbove);
-    if (!arrayToCheck) { return; }
+    if (topOrBottom == "bottom") {
+
+        console.log("rowAbove: ", node.parentNode.parentNode.children[rowNum * 2 - top]);
+        console.log("rowBelow: ", node.parentNode.parentNode.children[1]);
+        console.log("ARRAY TO CHECK", arrayToCheck);
+        console.log("rows",rows, "rowNum", rowNum);
+        console.log("rowBelow:" ,node.parentNode.parentNode.children[rowNum * 2 + top]);
+        console.log("arrayToCheck", top, rowNum, arrayToCheck, rowBelow, rowAbove);
+    }
+    if (!arrayToCheck) { console.log("made it here"); numberOfLines+= 2; return numberOfLines; }
 
     for (var k = 0; k < arrayToCheck.children.length; k++) {
-        console.log("MADE IT");
         if (top === 2) {
+            console.log("MADE IT", colNum , arrayToCheck.children[k].classList[1]);
             if (colNum == arrayToCheck.children[k].classList[1]) {
                 checkForPlayerLine(node) && numberOfLines ++;
                 topOrBottom == "top" && checkForPlayerLine(rowAbove.children[k]) && numberOfLines ++;
                 topOrBottom == "bottom" && checkForPlayerLine(rowBelow.children[k]) && numberOfLines ++;
-
+                console.log("numberOfLines when top ===2 ", numberOfLines);
             }
-        } else {
+        }
+        if (top != 2) {
+            console.log("made it else");
             var vertLineToCheck = arrayToCheck.children[k];
+            console.log("vertLineToCheck", vertLineToCheck);
             vertLineToCheck.classList[1] &&
             vertLineToCheck.classList[1][2] == colNum[2] &&
                 checkForPlayerLine(vertLineToCheck) && numberOfLines ++;
             vertLineToCheck.classList[1] &&
             vertLineToCheck.classList[1][2] == Number(colNum[2]) + 1  &&
                 checkForPlayerLine(vertLineToCheck) && numberOfLines ++;
+            console.log("numberOfLines", numberOfLines);
         }
     }
     return numberOfLines;
