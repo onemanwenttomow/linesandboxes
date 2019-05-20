@@ -6,6 +6,12 @@ var dotsRow = "";
 var html = "";
 var squaresRow = "";
 var rows = Math.floor(Math.random() * 5) + 3;
+var p1 = document.getElementsByClassName("player-1")[0];
+var p2 = document.getElementsByClassName("player-2")[0];
+var p1Score = 0;
+var p2Score = 0;
+var p1ScoreOnBoard = document.getElementsByClassName("p1score")[0];
+var p2ScoreOnBoard = document.getElementsByClassName("p2score")[0];
 
 for (var i = 0; i < rows; i++) {
     dotsRow += `<div class="dot"></div><div class="hl hl${i}"></div>`;
@@ -29,9 +35,9 @@ board.addEventListener("click", function(e) {
         return;
     }
     e.target.classList.add("p" + playerTurn);
-    console.log("nextSibling ", e.target.nextSibling );
 
     row[0] == "h" ? horizontalCheck(e.target, row) : verticalCheck(e.target, row);
+    console.log("p1Score", p1Score, "p2Score", p2Score);
     changeTurn();
 });
 
@@ -40,14 +46,16 @@ function horizontalCheck(node, row) {
     var bottomScore = 0;
     var bottomSquare, topSquare;
     var col = node.classList[1][2];
-    topScore += checkForCompletedSquare(node , row, 2, "top");
-    topScore += checkForCompletedSquare(node , row, 1);
-    bottomScore += checkForCompletedSquare(node , row, 2, "bottom");
-    console.log("bottomScore after first check", bottomScore);
-    bottomScore += checkForCompletedSquare(node , row, -1, "bottom") ;
-    console.log("bottomScore after second check", bottomScore);
+    if (row[1] != 0) {
+        topScore += checkForCompletedSquare(node , row, 2, "top");
+        topScore += checkForCompletedSquare(node , row, 1);
+    }
 
-    console.log("checking!!!!!!!!!!!!!!!!!!!!!!1  topScore",topScore,  "Bottomoscore, ", bottomScore);
+    if (row[1] != rows) {
+        bottomScore += checkForCompletedSquare(node , row, 2, "bottom");
+        bottomScore += checkForCompletedSquare(node , row, -1, "bottom") ;
+    }
+
     if (!node.parentNode.parentNode.children[Number(row[1]) * 2 + 1]) {
         bottomSquare = [];
     } else {
@@ -73,8 +81,6 @@ function verticalCheck(node, row) {
     leftScore === 4 && changeTurn();
     rightScore === 4 && changeTurn();
     rightScore === 4 && leftScore === 4 && changeTurn();
-    console.log("leftscore", leftScore, "rightScore", rightScore);
-
 }
 
 function checkForCompletedSquareVertical(node, row, leftOrRight) {
@@ -97,7 +103,6 @@ function checkForCompletedSquareVertical(node, row, leftOrRight) {
 }
 
 function checkForCompletedSquare(node, row, top, topOrBottom) {
-    console.log("node", node, row, top, topOrBottom);
     var numberOfLines = 0;
     var rowNum = row[1];
     var rowAbove = {};
@@ -105,40 +110,29 @@ function checkForCompletedSquare(node, row, top, topOrBottom) {
     var arrayToCheck;
     rowNum == 0 ? rowAbove.children = [] : rowAbove = node.parentNode.parentNode.children[rowNum * 2 - top];
     rowNum == rows ? rowBelow.children = [] : rowBelow = node.parentNode.parentNode.children[rowNum * 2 + top];
-    rowNum == 0 ? arrayToCheck = node.parentNode.parentNode.children[rowNum * 2 + top] : arrayToCheck = rowAbove;
+    rowNum == 0 ? arrayToCheck = rowBelow : arrayToCheck = rowAbove;
     var colNum = node.classList[1];
-    if (topOrBottom == "bottom") {
 
-        console.log("rowAbove: ", node.parentNode.parentNode.children[rowNum * 2 - top]);
-        console.log("rowBelow: ", node.parentNode.parentNode.children[1]);
-        console.log("ARRAY TO CHECK", arrayToCheck);
-        console.log("rows",rows, "rowNum", rowNum);
-        console.log("rowBelow:" ,node.parentNode.parentNode.children[rowNum * 2 + top]);
-        console.log("arrayToCheck", top, rowNum, arrayToCheck, rowBelow, rowAbove);
+    if (!arrayToCheck) {
+        arrayToCheck =node.parentNode.parentNode.children[rowNum * 2 - top];
     }
-    if (!arrayToCheck) { console.log("made it here"); numberOfLines+= 2; return numberOfLines; }
 
     for (var k = 0; k < arrayToCheck.children.length; k++) {
         if (top === 2) {
-            console.log("MADE IT", colNum , arrayToCheck.children[k].classList[1]);
             if (colNum == arrayToCheck.children[k].classList[1]) {
                 checkForPlayerLine(node) && numberOfLines ++;
                 topOrBottom == "top" && checkForPlayerLine(rowAbove.children[k]) && numberOfLines ++;
                 topOrBottom == "bottom" && checkForPlayerLine(rowBelow.children[k]) && numberOfLines ++;
-                console.log("numberOfLines when top ===2 ", numberOfLines);
             }
         }
         if (top != 2) {
-            console.log("made it else");
             var vertLineToCheck = arrayToCheck.children[k];
-            console.log("vertLineToCheck", vertLineToCheck);
             vertLineToCheck.classList[1] &&
             vertLineToCheck.classList[1][2] == colNum[2] &&
                 checkForPlayerLine(vertLineToCheck) && numberOfLines ++;
             vertLineToCheck.classList[1] &&
             vertLineToCheck.classList[1][2] == Number(colNum[2]) + 1  &&
                 checkForPlayerLine(vertLineToCheck) && numberOfLines ++;
-            console.log("numberOfLines", numberOfLines);
         }
     }
     return numberOfLines;
@@ -161,20 +155,24 @@ function fillBoxWithPlayer(node) {
     if (playerTurn === 1) {
         node.classList.add('player' + playerTurn);
         node.innerHTML = "🦔";
+        p1Score++;
+        p1ScoreOnBoard.innerHTML = p1Score;
     } else {
         node.classList.add('player' + playerTurn);
         node.innerHTML = "🐢";
+        p2Score++;
+        p2ScoreOnBoard.innerHTML = p2Score;
     }
 }
 
 function changeTurn() {
     if (playerTurn === 1) {
-        // p1.classList.remove('p1-active');
-        // p2.classList.add('p2-active');
+        p1.classList.remove('p1-active');
+        p2.classList.add('p2-active');
         playerTurn = 2;
     } else {
-        // p2.classList.remove('p2-active');
-        // p1.classList.add('p1-active');
+        p2.classList.remove('p2-active');
+        p1.classList.add('p1-active');
         playerTurn = 1;
     }
 }

@@ -11,32 +11,65 @@ body {
     align-items: center;
 }
 
-/* .board {
-    display: flex;
-    flex-wrap: wrap;
-} */
-.row .p1 {
-    background-color: #3fbac2;
-}
-
-.row .p2 {
-    background-color: #4d606e;
-}
-
-.player1 {
-    /* background-color: #3fbac2; */
-    /* opacity: 0.5; */
-}
-
-.player2 {
-    /* background-color: #4d606e; */
-    /* opacity: 0.5; */
-}
 
 .dot {
     height: 1.5vh;
     width: 1.5vh;
     background-color: #f5f5f5;
+}
+
+.square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 7vh;
+    height: 10vh;
+    width: 10vh;
+}
+
+.row {
+    display: flex;
+}
+
+.player-1 {
+    display: flex;
+    justify-content: flex-end;
+    width: 15vh;
+    padding: 1.5vh;
+    border-radius: 1vh;
+    margin-right: 3vh;
+}
+
+.p1-active {
+    background-color: #3fbac2;
+}
+
+.p2-active {
+    background-color: #4d606e;
+}
+
+.player-2 {
+    display: flex;
+    justify-content: flex-end;
+    width: 15vh;
+    padding: 1.5vh;
+    border-radius: 1vh;
+}
+
+.pick-player {
+    display: flex;
+    justify-content: center;
+    font-size: 7vh;
+    margin: 1.5vh;
+}
+
+.score {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    color:  #d3d4d8;
+    font-size: 8vh;
+    padding: 0 1.5vh;
 }
 
 .hl {
@@ -51,16 +84,10 @@ body {
     background-color: #d3d4d8;
 }
 
-.square {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 7vh;
-    height: 10vh;
-    width: 10vh;
-    /* background-color: #f5f5f5; */
+.row .p1 {
+    background-color: #3fbac2;
 }
 
-.row {
-    display: flex;
+.row .p2 {
+    background-color: #4d606e;
 }
