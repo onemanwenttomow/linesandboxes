@@ -86,14 +86,6 @@ body {
     background-color: #d3d4d8;
 }
 
-.row .p1 {
-    /* background-color: #3fbac2; */
-}
-
-.row .p2 {
-    /* background-color: #4d606e; */
-}
-
 .hzline1 {
     position: absolute;
     top: 0;
@@ -128,6 +120,24 @@ body {
     width: 100%;
     background-color: #4d606e;
     animation: growv 0.5s forwards;
+}
+
+.dot1 {
+    animation: flash1 0.5s forwards;
+}
+
+.dot2 {
+    animation: flash2 0.5s forwards;
+}
+
+@keyframes flash2 {
+    0% { background-color: #4d606e; }
+    100% { background-color: #f5f5f5; }
+}
+
+@keyframes flash1 {
+    0% { background-color: #3fbac2; }
+    100% { background-color: #f5f5f5; }
 }
 
 @keyframes growh {

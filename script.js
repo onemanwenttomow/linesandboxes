@@ -10,6 +10,7 @@ var p1 = document.getElementsByClassName("player-1")[0];
 var p2 = document.getElementsByClassName("player-2")[0];
 var p1Score = 0;
 var p2Score = 0;
+var totalScore = 0;
 var p1ScoreOnBoard = document.getElementsByClassName("p1score")[0];
 var p2ScoreOnBoard = document.getElementsByClassName("p2score")[0];
 
@@ -35,7 +36,6 @@ board.addEventListener("click", function(e) {
         return;
     }
     e.target.classList.add("p" + playerTurn);
-
     if (row[0] == "h") {
         e.target.innerHTML = '<span class="hzline'+ playerTurn +'"></span>';
         horizontalCheck(e.target, row);
@@ -45,8 +45,40 @@ board.addEventListener("click", function(e) {
     }
 
     console.log("p1Score", p1Score, "p2Score", p2Score);
+    totalScore = p1Score + p2Score;
+    console.log("totalScore", totalScore);
+    console.log(totalScore === rows*rows);
+    totalScore === rows*rows && console.log("game finished!!p1 ", p1Score, "p2score", p2Score);
     changeTurn();
+    if (totalScore === rows*rows) {
+        if (p1Score > p2Score) {
+            winningAnimation(1);
+        }
+        if (p2Score > p1Score) {
+            winningAnimation(2);
+        }
+    }
+
+
 });
+
+function winningAnimation(player) {
+    var dots = document.getElementsByClassName('dot');
+    var time = 0;
+    for (var i = 0; i < dots.length; i++) {
+        time += 100;
+        if (i == dots.length -1) {
+            addDotWithDelay(dots[i], player, true);
+        }
+        addDotWithDelay(dots[i], player, false, time);
+    }
+    function addDotWithDelay(dot, player, end, time) {
+        setTimeout(function(){
+            if (end) { return; }
+            dot.classList.add('dot'+ player);
+        }, time);
+    }
+}
 
 function horizontalCheck(node, row) {
     var topScore = 0;
@@ -146,7 +178,13 @@ function checkForCompletedSquare(node, row, top, topOrBottom) {
 }
 
 function nonClicks(node) {
-    if (node.classList[0] === "square" || node.classList[0] === "dot") {
+    if (node.classList[0] === "square" ||
+        node.classList[0] === "dot" ||
+        node.classList[0] == "vline2" ||
+        node.classList[0] == "vline1" ||
+        node.classList[0] == "hzline2" ||
+        node.classList[0] == "hzline1"
+    ) {
         return true;
     }
 }
