@@ -36,7 +36,14 @@ board.addEventListener("click", function(e) {
     }
     e.target.classList.add("p" + playerTurn);
 
-    row[0] == "h" ? horizontalCheck(e.target, row) : verticalCheck(e.target, row);
+    if (row[0] == "h") {
+        e.target.innerHTML = '<span class="hzline'+ playerTurn +'"></span>';
+        horizontalCheck(e.target, row);
+    } else {
+        e.target.innerHTML = '<span class="vline'+ playerTurn +'"></span>';
+        verticalCheck(e.target, row);
+    }
+
     console.log("p1Score", p1Score, "p2Score", p2Score);
     changeTurn();
 });
@@ -154,12 +161,17 @@ function checkForPlayerLine(node) {
 function fillBoxWithPlayer(node) {
     if (playerTurn === 1) {
         node.classList.add('player' + playerTurn);
-        node.innerHTML = "🦔";
+        setTimeout(function(){
+            node.innerHTML = "🦔";
+        },500);
+
         p1Score++;
         p1ScoreOnBoard.innerHTML = p1Score;
     } else {
         node.classList.add('player' + playerTurn);
-        node.innerHTML = "🐢";
+        setTimeout(function(){
+            node.innerHTML = "🐢";
+        },500);
         p2Score++;
         p2ScoreOnBoard.innerHTML = p2Score;
     }

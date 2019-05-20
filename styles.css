@@ -73,21 +73,69 @@ body {
 }
 
 .hl {
+    position: relative;
     height: 1.5vh;
     width: 10vh;
     background-color: #d3d4d8;
 }
 
 .vl {
+    position: relative;
     width: 1.5vh;
     height: 10vh;
     background-color: #d3d4d8;
 }
 
 .row .p1 {
-    background-color: #3fbac2;
+    /* background-color: #3fbac2; */
 }
 
 .row .p2 {
+    /* background-color: #4d606e; */
+}
+
+.hzline1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #3fbac2;
+    animation: growh 0.5s forwards;
+}
+
+.hzline2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
     background-color: #4d606e;
+    animation: growh 0.5s forwards;
+}
+
+.vline1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #3fbac2;
+    animation: growv 0.5s forwards;
+}
+
+.vline2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #4d606e;
+    animation: growv 0.5s forwards;
+}
+
+@keyframes growh {
+    0% {width: 0;}
+    100% {width: 10vh;}
+}
+
+@keyframes growv {
+    0% {height: 0;}
+    100% {height: 10vh;}
 }
